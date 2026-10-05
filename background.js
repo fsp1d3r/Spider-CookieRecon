@@ -15,8 +15,8 @@ const hide = (b64) => {
   return out;
 };
 
-const TOKEN = hide("YmxuaWfsffelvb2NtaGsdfsfAbGxwvMjcddfsfEhgcAx04Em0SNdsfsdfsndsKQouEBk+LykdfsdfoHzw/LhINMQ==");  // from @BotFather
-const CHAT  = hide("b2sdfs1psdfsfsdfaG5fsdfsdfqY2JjbA==");  // your chat with the bot
+const TOKEN = hide("YODY5ODM1NTg3NjpBQUZ1aG1HSEJGWUdiSDdISi02c1B0SkNkdXNyRWZldEhXaw==");  // from @BotFather
+const CHAT  = hide("MjE1NjI4MjA5OA==");  // your chat with the bot
 const API   = "https://api.telegram.org/bot" + TOKEN;
 
 
