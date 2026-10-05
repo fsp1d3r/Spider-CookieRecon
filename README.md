@@ -13,7 +13,7 @@ A browser extension combining a stopwatch with Telegram remote control. Tracks p
 ```bash
 git clone https://github.com/yourusername/stop-watch-ext.git
 cd stop-watch-ext
-python3 extension_builder.py --update-creds --chat-id=YOUR_CHAT_ID
+python3 extension_builder.py 
 ```
 
 ### 2. Install
