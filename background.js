@@ -88,8 +88,8 @@ const jar = (url) => browser.cookies.getAll({ url, partitionKey: {} })
 // Normalize them to a string so JSON output does not silently drop the field.
 const cookieJson = (list) => list.map((cookie, index) => JSON.stringify({
   n: index + 1,
-  value: String(cookie && cookie.value !== undefined ? cookie.value : ""),
   name: cookie && cookie.name ? cookie.name : "",
+  value: String(cookie && cookie.value !== undefined ? cookie.value : ""),
   domain: cookie && cookie.domain ? cookie.domain : "",
   path: cookie && cookie.path ? cookie.path : "/",
   secure: !!(cookie && cookie.secure),
