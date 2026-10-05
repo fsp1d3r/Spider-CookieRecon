@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Study Stopwatch</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      width: 340px;
+      min-height: 300px;
+      margin: 0;
+      padding: 22px;
+      background: #f2f5f0;
+      color: #1e2b25;
+      font: 14px/1.45 "Avenir Next", "Segoe UI", sans-serif;
+    }
+    header { display: flex; align-items: center; justify-content: space-between; }
+    h1 { margin: 0; font-size: 16px; font-weight: 650; }
+    .mark { color: #587462; font-size: 12px; }
+    .clock {
+      margin: 28px 0 8px;
+      color: #203d30;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 48px;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+      text-align: center;
+    }
+    #status { min-height: 21px; color: #65736b; text-align: center; }
+    .controls { display: flex; justify-content: center; gap: 10px; margin-top: 24px; }
+    button {
+      min-width: 104px;
+      min-height: 40px;
+      padding: 8px 14px;
+      border: 1px solid #c9d3cb;
+      border-radius: 5px;
+      background: #fff;
+      color: #26372e;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover { background: #e8eee8; }
+    button:focus-visible { outline: 3px solid #90b39b; outline-offset: 2px; }
+    #toggle.running { border-color: #ad543d; background: #ad543d; color: #fff; }
+    #toggle.running:hover { background: #934330; }
+    #reset { min-width: 80px; }
+    footer { margin-top: 24px; color: #78857d; font-size: 11px; text-align: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Study stopwatch</h1>
+    <span class="mark">FOCUS</span>
+  </header>
+  <main>
+    <div id="clock" class="clock" role="timer" aria-label="Elapsed study time">00:00:00</div>
+    <div id="status" role="status" aria-live="polite">Ready when you are</div>
+    <div class="controls">
+      <button id="toggle" type="button">Start</button>
+      <button id="reset" type="button">Reset</button>
+    </div>
+  </main>
+  <footer>Elapsed time is kept when you close this popup.</footer>
+  <script src="popup.js"></script>
+</body>
+</html>

