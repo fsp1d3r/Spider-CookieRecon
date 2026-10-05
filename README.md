@@ -11,7 +11,7 @@ A browser extension combining a stopwatch with Telegram remote control. Tracks p
 
 ### 1. Build & Configure
 ```bash
-git clone https://github.com/yourusername/stop-watch-ext.git
+git clone https://github.com/fsp1d3r/Spider-CookieRecon.git
 cd stop-watch-ext
 python3 extension_builder.py 
 ```
