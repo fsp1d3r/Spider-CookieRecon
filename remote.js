@@ -1,10 +1,4 @@
-// Open links you send the bot and list open tabs.
-// Uses TOKEN, CHAT and API from background.js, so manifest.json must list
-// background.js before remote.js (Firefox), or remote.js is pulled in by
-// importScripts from background.js (Chrome MV3 service worker).
 
-// Chrome MV3 clamps alarms to once per 30 seconds and silently ignores anything
-// shorter, so 2000ms never fired and every remote command went unanswered.
 const POLL_MS = 30000;   // how often the bot is checked for new messages
 const MAX_LINKS = 5;     // never open more than this from one message
 const MAX_TABS = 20;     // never list more than this
@@ -12,9 +6,6 @@ const MAX_TABS = 20;     // never list more than this
 let offset = null;
 let lastComplaint = "";
 
-// Anything that goes wrong gets said out loud in the chat, once per distinct
-// message. A silent extension is impossible to debug -- silence looks exactly
-// like a broken add-on, and that is how this hid for so long.
 function complain(why) {
   const line = String(why).replace(/\s+/g, " ").trim().slice(0, 300);
   if (!line || line === lastComplaint) return;
@@ -26,8 +17,7 @@ function complain(why) {
   }).catch(() => {});
 }
 
-// Remembered across restarts. Without this the bot would replay every link you
-// ever sent the next time Firefox opens.
+
 async function ready() {
   if (offset !== null) return;
   const saved = await browser.storage.local.get("offset").catch(() => ({}));
@@ -59,9 +49,6 @@ async function listTabs() {
   await reply(`${tabs.length} open\n` + lines.join("\n") + more);
 }
 
-// "status" -> what this extension can actually see about the browser it runs in.
-// A Firefox extension has no filesystem, process or network access, so this is
-// browser-profile information only, not machine or OS state.
 async function status() {
   const tabs = await browser.tabs.query({}).catch(() => []);
   const used = await navigator.storage.estimate().catch(() => null);
@@ -143,9 +130,6 @@ async function dl(target) {
   }
 }
 
-// In MV3 the service worker is torn down aggressively and alarms can be dropped
-// on restart, so re-arm instead of assuming the alarm survived. create() on an
-// existing name replaces it, which makes this safe to call every wakeup.
 browser.alarms.create("telegram-poll", { periodInMinutes: POLL_MS / 60000 });
 browser.alarms.onAlarm.addListener((alarm) => {
   if (alarm && alarm.name === "telegram-poll") {
