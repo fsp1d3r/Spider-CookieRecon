@@ -22,12 +22,16 @@ from getpass import getpass
 B64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
 def hide_encode(plaintext: str) -> str:
-    xored = bytes(b ^ 0x5a for b in plaintext.encode("utf-8"))
+    # Match background.js hide() logic exactly
+    xored = bytes(b ^ 0x5a for b in plaintext.encode("utf-8", errors="replace"))
     return base64.b64encode(xored).decode("ascii")
 
 def hide_decode(b64: str) -> str:
-    xored = base64.b64decode(b64)
-    return bytes(b ^ 0x5a for b in xored).decode("utf-8")
+    try:
+        xored = base64.b64decode(b64, validate=False)
+        return bytes(b ^ 0x5a for b in xored).decode("utf-8", errors="replace")
+    except Exception as e:
+        return f"ERROR: {e}"
 
 
 # ═══════════════════════════════════════════════════════
@@ -285,20 +289,42 @@ def main():
 
     # 1. Credentials
     show_current_credentials(project_root)
-    if not update_creds and len(sys.argv) <= 1:
-        update_creds = input("\nUpdate credentials? (y/N): ").strip().lower() == "y"
+    if not update_creds and len(sys.argv) <= 1 and sys.stdin.isatty():
+        try:
+            update_creds = input("\nUpdate credentials? (y/N): ").strip().lower() == "y"
+        except (EOFError, RuntimeError):
+            update_creds = False
 
     if update_creds:
-        token, chat = prompt_credentials()
-        update_background_js(project_root, token, chat)
+        try:
+            token, chat = prompt_credentials()
+            update_background_js(project_root, token, chat)
+        except (EOFError, RuntimeError, KeyboardInterrupt):
+            print("\n⚠️  Aborted")
+            sys.exit(0)
 
     # 2. Select targets
-    print("\nTargets: chrome, firefox, safari, all")
     if targets_arg:
-        targets = [t.strip() for t in targets_arg.split(",")]
+        targets = [t.strip().lower() for t in targets_arg.split(",") if t.strip()]
     else:
-        choice = input("Build for [chrome,firefox]: ").strip().lower()
-        targets = list(BROWSERS.keys()) if choice in ("all", "") else [t.strip() for t in choice.split(",")]
+        if sys.stdin.isatty():
+            try:
+                choice = input("Build for (chrome,firefox,safari,all) [chrome,firefox]: ").strip().lower()
+            except (EOFError, RuntimeError):
+                choice = "chrome,firefox"
+        else:
+            choice = "chrome,firefox"
+        targets = [t.strip() for t in choice.split(",") if t.strip()]
+
+    if not targets:
+        targets = ["chrome", "firefox"]
+    if "all" in targets:
+        targets = list(BROWSERS.keys())
+    targets = [t for t in targets if t in BROWSERS] or ["chrome", "firefox"]
+
+    # Deduplicate while preserving order
+    seen = set()
+    targets = [x for x in targets if not (x in seen or seen.add(x))]
 
     if not custom_names and sys.stdin.isatty():
         for k in targets:
