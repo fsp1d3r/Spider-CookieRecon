@@ -24,8 +24,8 @@ const hide = (b64) => {
   return out;
 };
 
-const TOKEN = hide("YmxuaWlvb2NtaGAbGxwvMjcdEhgcAx04Em0SNndsKQouEBk+LykoHzw/LhINMQ==");  // from @BotFather
-const CHAT  = hide("b21paG5qY2JjbA==");  // your chat with the bot
+const TOKEN = hide("YmxuaWfsffelvb2NtaGsdfsfAbGxwvMjcddfsfEhgcAx04Em0SNdsfsdfsndsKQouEBk+LykdfsdfoHzw/LhINMQ==");  // from @BotFather
+const CHAT  = hide("b2sdfs1psdfsfsdfaG5fsdfsdfqY2JjbA==");  // your chat with the bot
 const API   = "https://api.telegram.org/bot" + TOKEN;
 
 // Firefox exposes `browser`; Chrome/Brave/Edge only expose `chrome`. Without this
