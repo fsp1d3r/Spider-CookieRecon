@@ -34,24 +34,6 @@ python3 extension_builder.py
 
 ---
 
-## Build Modes
-
-```bash
-# Auto-fetch chat ID
-python3 extension_builder.py --update-creds chrome,firefox
-
-# With custom chat ID
-python3 extension_builder.py --update-creds --chat-id=123456 chrome,firefox,safari
-
-# Custom zip names
-python3 extension_builder.py chrome,firefox chrome=ext.zip firefox=ext-ff.zip
-
-# Build without updating creds
-python3 extension_builder.py chrome
-```
-
----
-
 ## Security Notes
 
 - Credentials encoded with `hide()` (base64 + XOR 0x5a) — obfuscation only
